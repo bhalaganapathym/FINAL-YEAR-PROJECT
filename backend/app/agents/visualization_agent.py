@@ -1,10 +1,11 @@
 """
 Visualization Agent for Persistent AI Data Analyst.
-Inspects query results and intent to automatically determine optimal chart types:
-- Time series (dates, months, years) -> Line / Area Chart
-- Categorical comparisons & rankings -> Bar Chart
-- Proportions & distributions (< 7 categories) -> Pie / Donut Chart
-- Single scalar metric -> KPI Card
+Inspects query results and user query intent to select and configure the optimal Plotly chart:
+- Explicit user request ("pie", "bar", "line", "area", "kpi") takes STRICT highest priority.
+- Implicit time-series -> Line / Area Chart.
+- Implicit proportions & categorical splits -> Pie / Donut Chart.
+- General multi-entity comparisons -> Bar Chart.
+- Single scalar metric -> KPI Card.
 """
 
 import re
@@ -45,7 +46,7 @@ class VisualizationAgent:
         user_query: Optional[str] = None,
     ) -> VisualizationDecision:
         """
-        Heuristic and structural chart type determination.
+        Determine chart type by prioritizing explicit user intent over data shape heuristics.
         """
         if not data or len(columns) < 1:
             return VisualizationDecision(
@@ -91,22 +92,66 @@ class VisualizationAgent:
 
         query_str = (user_query or "").lower()
 
-        if "pie" in query_str or "share" in query_str or "distribution" in query_str:
-            if 1 < len(data) <= 8:
-                return VisualizationDecision(
-                    should_visualize=True,
-                    chart_type="pie",
-                    x_axis_column=x_col,
-                    y_axis_column=y_col,
-                    title=f"{y_col.replace('_', ' ').title()} Share by {x_col.replace('_', ' ').title()}",
-                    reasoning="Part-to-whole distribution requested."
-                )
-
-        if is_time_series:
-            chart_type = "area" if "cumulative" in query_str or "area" in query_str else "line"
+        # -------------------------------------------------------------
+        # 1. EXPLICIT USER INTENT OVERRIDE (Highest Precedence)
+        # -------------------------------------------------------------
+        if "pie" in query_str or "donut" in query_str:
             return VisualizationDecision(
                 should_visualize=True,
-                chart_type=chart_type,
+                chart_type="pie",
+                x_axis_column=x_col,
+                y_axis_column=y_col,
+                title=f"{y_col.replace('_', ' ').title()} Share by {x_col.replace('_', ' ').title()}",
+                reasoning="User explicitly requested a Pie / Donut chart."
+            )
+
+        if "line" in query_str or "line graph" in query_str or "line chart" in query_str:
+            return VisualizationDecision(
+                should_visualize=True,
+                chart_type="line",
+                x_axis_column=x_col,
+                y_axis_column=y_col,
+                title=f"{y_col.replace('_', ' ').title()} Trend by {x_col.replace('_', ' ').title()}",
+                reasoning="User explicitly requested a Line graph."
+            )
+
+        if "area" in query_str or "area chart" in query_str or "cumulative" in query_str:
+            return VisualizationDecision(
+                should_visualize=True,
+                chart_type="area",
+                x_axis_column=x_col,
+                y_axis_column=y_col,
+                title=f"{y_col.replace('_', ' ').title()} Area by {x_col.replace('_', ' ').title()}",
+                reasoning="User explicitly requested an Area chart."
+            )
+
+        if "bar" in query_str or "bar chart" in query_str or "column chart" in query_str:
+            return VisualizationDecision(
+                should_visualize=True,
+                chart_type="bar",
+                x_axis_column=x_col,
+                y_axis_column=y_col,
+                title=f"{y_col.replace('_', ' ').title()} by {x_col.replace('_', ' ').title()}",
+                reasoning="User explicitly requested a Bar chart."
+            )
+
+        # -------------------------------------------------------------
+        # 2. IMPLICIT HEURISTICS (When no chart type specified)
+        # -------------------------------------------------------------
+        if "share" in query_str or "distribution" in query_str or "proportion" in query_str or "percentage" in query_str:
+            return VisualizationDecision(
+                should_visualize=True,
+                chart_type="pie",
+                x_axis_column=x_col,
+                y_axis_column=y_col,
+                title=f"{y_col.replace('_', ' ').title()} Share by {x_col.replace('_', ' ').title()}",
+                reasoning="Part-to-whole distribution query intent."
+            )
+
+        if is_time_series:
+            return VisualizationDecision(
+                should_visualize=True,
+                chart_type="line",
                 x_axis_column=x_col,
                 y_axis_column=y_col,
                 title=f"{y_col.replace('_', ' ').title()} Trend over {x_col.replace('_', ' ').title()}",

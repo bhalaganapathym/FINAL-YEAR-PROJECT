@@ -10,13 +10,16 @@ Builds interactive Plotly chart specifications:
 """
 
 from typing import Any, Dict, List, Optional
-import pandas as pd
 from app.utils.logger import logger
 
-# Premium Plotly color palette (Tailored Slate/Indigo/Teal/Rose)
+# Extended vibrant color palette (30 distinct colors) for rich multi-slice pie/bar visualizations
 COLOR_PALETTE = [
     "#6366F1", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6",
-    "#EC4899", "#14B8A6", "#3B82F6", "#F97316", "#06B6D4"
+    "#EC4899", "#14B8A6", "#3B82F6", "#F97316", "#06B6D4",
+    "#84CC16", "#A855F7", "#D946EF", "#0EA5E9", "#F43F5E",
+    "#22C55E", "#EAB308", "#64748B", "#475569", "#4F46E5",
+    "#059669", "#D97706", "#DC2626", "#7C3AED", "#DB2777",
+    "#0D9488", "#2563EB", "#EA580C", "#0891B2", "#65A30D"
 ]
 
 DARK_LAYOUT_TEMPLATE = {
@@ -24,7 +27,7 @@ DARK_LAYOUT_TEMPLATE = {
     "plot_bgcolor": "rgba(0,0,0,0)",
     "font": {"family": "Inter, sans-serif", "color": "#F3F4F6", "size": 12},
     "margin": {"l": 50, "r": 30, "t": 60, "b": 50},
-    "legend": {"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1},
+    "legend": {"orientation": "h", "yanchor": "bottom", "y": -0.3, "xanchor": "center", "x": 0.5},
     "hovermode": "closest",
     "autosize": True,
 }
@@ -69,7 +72,6 @@ class VisualizationService:
             },
         }
 
-        # Extract values
         x_vals = [row.get(x_col) for row in data]
         y_vals = [row.get(y_col) for row in data]
 
@@ -99,18 +101,22 @@ class VisualizationService:
             return {"data": [trace], "layout": layout}
 
         elif chart_type == "pie":
+            # Multi-slice pie/donut chart
+            colors = COLOR_PALETTE * ((len(x_vals) // len(COLOR_PALETTE)) + 1)
             trace = {
                 "type": "pie",
                 "labels": x_vals,
                 "values": y_vals,
                 "hole": 0.4,
-                "marker": {"colors": COLOR_PALETTE},
-                "textinfo": "label+percent",
+                "marker": {"colors": colors[:len(x_vals)]},
+                "textinfo": "percent" if len(x_vals) > 6 else "label+percent",
+                "textposition": "inside" if len(x_vals) > 6 else "auto",
                 "hoverinfo": "label+value+percent",
             }
             pie_layout = {
                 **DARK_LAYOUT_TEMPLATE,
                 "title": {"text": title_text, "font": {"size": 16, "color": "#FFFFFF"}},
+                "showlegend": True,
             }
             return {"data": [trace], "layout": pie_layout}
 
