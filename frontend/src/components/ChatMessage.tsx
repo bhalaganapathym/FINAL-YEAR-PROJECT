@@ -16,64 +16,66 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const { response, loading } = message;
 
   return (
-    <div className={`py-6 px-4 sm:px-8 flex ${isUser ? "bg-[#0A0E18]/40" : "bg-[#0D1322]/80 border-y border-[#182236]"}`}>
-      <div className="max-w-4xl mx-auto w-full flex space-x-4">
+    <div className={`py-5 px-4 sm:px-8 flex ${isUser ? "justify-end" : "justify-start"}`}>
+      <div className={`w-full max-w-4xl flex space-x-3.5 ${isUser ? "flex-row-reverse space-x-reverse" : "flex-row"}`}>
         {/* Avatar */}
-        <div className="shrink-0 mt-0.5">
+        <div className="shrink-0 mt-1">
           {isUser ? (
-            <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-              <User className="w-4 h-4" />
+            <div className="w-10 h-10 bg-[#FF6B6B] border-3 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center text-white rotate-[2deg]">
+              <User className="w-5 h-5 stroke-[3px]" />
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-emerald-400 p-0.5 shadow-md shadow-indigo-500/20">
-              <div className="w-full h-full bg-[#0B0F19] rounded-[6px] flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-indigo-400" />
-              </div>
+            <div className="w-10 h-10 bg-[#FFD93D] border-3 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center text-black rotate-[-2deg]">
+              <Sparkles className="w-5 h-5 stroke-[3px]" />
             </div>
           )}
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 min-w-0 space-y-3">
+        <div className="flex-1 min-w-0">
           {/* Header & Timestamp */}
-          <div className="flex items-center space-x-2">
-            <span className="text-xs font-semibold text-gray-200">
-              {isUser ? "You" : "AI Data Analyst"}
+          <div className={`flex items-center space-x-2 mb-1.5 ${isUser ? "justify-end" : "justify-start"}`}>
+            <span className="text-xs font-black uppercase text-black">
+              {isUser ? "YOU" : "AI DATA ANALYST"}
             </span>
-            <span className="text-[10px] text-gray-500">{message.timestamp}</span>
+            <span className="text-[10px] font-mono font-bold bg-white px-1.5 py-0.5 border border-black text-black">
+              {message.timestamp}
+            </span>
           </div>
 
           {/* User Message Text */}
           {isUser && (
-            <p className="text-sm text-gray-200 leading-relaxed font-normal">
+            <div className="p-4 bg-[#FFD93D] border-4 border-black shadow-[6px_6px_0px_0px_#000] text-black font-bold text-sm leading-relaxed max-w-2xl ml-auto">
               {message.content}
-            </p>
+            </div>
           )}
 
           {/* Assistant Loading State */}
           {loading && (
-            <div className="flex items-center space-x-3 py-4 text-indigo-400 text-xs">
-              <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
-              <span className="font-medium animate-pulse">
+            <div className="p-5 bg-white border-4 border-black shadow-[6px_6px_0px_0px_#000] flex items-center space-x-3 text-black">
+              <Loader2 className="w-5 h-5 animate-spin stroke-[3px] text-[#FF6B6B]" />
+              <span className="text-xs font-black uppercase tracking-wider">
                 Analyzing query with LangGraph Multi-Agent pipeline...
               </span>
             </div>
           )}
 
-          {/* Assistant Response Content */}
+          {/* Assistant Response Card */}
           {!isUser && !loading && response && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {/* Natural Language Answer / Summary */}
               {response.answer && (
-                <div className="prose prose-invert prose-sm max-w-none text-gray-200 leading-relaxed text-sm">
-                  <ReactMarkdown>{response.answer}</ReactMarkdown>
+                <div className="p-5 bg-white border-4 border-black shadow-[6px_6px_0px_0px_#000] text-black leading-relaxed text-sm font-bold">
+                  <div className="prose max-w-none text-black font-bold">
+                    <ReactMarkdown>{response.answer}</ReactMarkdown>
+                  </div>
                 </div>
               )}
 
               {/* Error Callout if any */}
               {response.error && (
-                <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs flex items-start space-x-2">
-                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                <div className="p-4 bg-[#FF6B6B] border-4 border-black shadow-[6px_6px_0px_0px_#000] text-white text-xs font-black uppercase flex items-start space-x-2.5">
+                  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 stroke-[3px]" />
                   <span>{response.error}</span>
                 </div>
               )}
@@ -89,16 +91,18 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
               {/* Business Insights Bullets */}
               {response.insights && response.insights.length > 0 && (
-                <div className="my-3 p-4 rounded-xl bg-[#111C30]/70 border border-indigo-900/30">
-                  <div className="flex items-center space-x-2 text-xs font-semibold text-amber-300 mb-2">
-                    <Lightbulb className="w-4 h-4 text-amber-400" />
-                    <span>Executive Insights</span>
+                <div className="p-4 bg-[#C4B5FD] border-4 border-black shadow-[6px_6px_0px_0px_#000]">
+                  <div className="flex items-center space-x-2 text-xs font-black uppercase text-black mb-2.5">
+                    <div className="p-1 bg-white border-2 border-black">
+                      <Lightbulb className="w-4 h-4 stroke-[3px] text-black" />
+                    </div>
+                    <span>EXECUTIVE BUSINESS INSIGHTS</span>
                   </div>
-                  <ul className="space-y-1.5 text-xs text-gray-300">
+                  <ul className="space-y-2 text-xs font-bold text-black">
                     {response.insights.map((insight, idx) => (
-                      <li key={idx} className="flex items-start space-x-2">
-                        <span className="text-amber-400 font-bold">•</span>
-                        <span>{insight}</span>
+                      <li key={idx} className="flex items-start space-x-2 bg-white/60 p-2 border-2 border-black">
+                        <span className="text-black font-black">•</span>
+                        <span className="leading-relaxed">{insight}</span>
                       </li>
                     ))}
                   </ul>

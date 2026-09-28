@@ -4,30 +4,37 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class",
   theme: {
     extend: {
-      colors: {
-        brand: {
-          50: "#eef2ff",
-          100: "#e0e7ff",
-          500: "#6366f1",
-          600: "#4f46e5",
-          700: "#4338ca",
-          900: "#312e81",
-        },
-        dark: {
-          bg: "#0B0F19",
-          card: "#111827",
-          sidebar: "#070B14",
-          border: "#1F2937",
-          hover: "#1E293B",
-        }
-      },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "Fira Code", "monospace"],
-      }
+        sans: ['"Space Grotesk"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+      colors: {
+        neo: {
+          bg: '#FFFDF5',
+          black: '#000000',
+          white: '#FFFFFF',
+          accent: '#FF6B6B',     // Hot Red
+          secondary: '#FFD93D',  // Vivid Yellow
+          muted: '#C4B5FD',      // Soft Violet
+          emerald: '#10B981',    // Vivid Green
+          blue: '#38BDF8',       // Bright Sky Blue
+        },
+      },
+      boxShadow: {
+        'neo-sm': '4px 4px 0px 0px #000000',
+        'neo': '6px 6px 0px 0px #000000',
+        'neo-md': '8px 8px 0px 0px #000000',
+        'neo-lg': '12px 12px 0px 0px #000000',
+        'neo-xl': '16px 16px 0px 0px #000000',
+      },
+      borderWidth: {
+        '3': '3px',
+        '4': '4px',
+        '6': '6px',
+        '8': '8px',
+      },
     },
   },
   plugins: [],

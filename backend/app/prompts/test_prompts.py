@@ -1,7 +1,3 @@
-"""
-Test prompt templates and Pydantic schemas for verifying Gemini structured output capabilities.
-"""
-
 from typing import List, Optional
 from pydantic import BaseModel, Field
 

@@ -1,7 +1,3 @@
-"""
-Prompt templates and few-shot examples for the Intent Classification Agent.
-"""
-
 INTENT_SYSTEM_PROMPT = """You are the Intent Classification Agent in an enterprise AI Business Intelligence system.
 Your job is to deeply understand the user's natural language question, analyze previous conversation context (if any), and extract structured analytical intent, metrics, dimensions, filters, time ranges, and execution flags.
 

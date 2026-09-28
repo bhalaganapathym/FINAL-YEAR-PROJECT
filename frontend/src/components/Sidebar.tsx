@@ -17,8 +17,8 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   conversations,
   currentId,
-  onSelectConversation,
   onNewConversation,
+  onSelectConversation,
   dbStatus,
   databases,
   activeDatabaseId,
@@ -26,57 +26,61 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenUploadModal,
 }) => {
   return (
-    <aside className="w-72 bg-[#070B14] border-r border-[#1F2937] flex flex-col h-screen select-none">
+    <aside className="w-80 bg-[#FFFDF5] border-r-4 border-black flex flex-col h-screen select-none z-20">
       {/* Brand Header */}
-      <div className="p-5 border-b border-[#1F2937] flex items-center space-x-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/20">
-          <div className="w-full h-full bg-[#0B0F19] rounded-[10px] flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-indigo-400" />
-          </div>
+      <div className="p-5 border-b-4 border-black bg-[#FFD93D] flex items-center space-x-3">
+        <div className="w-11 h-11 bg-white border-3 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center rotate-[-2deg]">
+          <Sparkles className="w-6 h-6 text-black stroke-[3px]" />
         </div>
         <div>
-          <h1 className="font-bold text-sm text-white tracking-wide flex items-center gap-1.5">
-            AI Data Analyst
-            <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-md border border-indigo-500/30">
+          <div className="flex items-center space-x-1.5">
+            <h1 className="font-black text-sm text-black tracking-tight uppercase">
+              AI DATA ANALYST
+            </h1>
+            <span className="text-[10px] uppercase font-black px-1.5 py-0.5 bg-[#FF6B6B] text-white border-2 border-black rotate-[2deg]">
               2.0
             </span>
-          </h1>
-          <p className="text-xs text-gray-400 font-medium">Conversational BI</p>
+          </div>
+          <p className="text-[11px] text-black font-bold uppercase tracking-wider">
+            Conversational BI
+          </p>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="p-4 space-y-2">
+      <div className="p-4 space-y-3 border-b-4 border-black bg-white">
         <button
           onClick={onNewConversation}
-          className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs flex items-center justify-center space-x-2 transition-all shadow-md shadow-indigo-600/20 active:scale-[0.98]"
+          className="w-full py-3 px-4 bg-[#FF6B6B] hover:bg-[#ff5252] text-white font-black text-xs uppercase tracking-wider border-4 border-black shadow-[4px_4px_0px_0px_#000] flex items-center justify-center space-x-2 neo-btn"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 stroke-[3px]" />
           <span>New Analysis</span>
         </button>
 
         <button
           onClick={onOpenUploadModal}
-          className="w-full py-2 px-3 rounded-xl bg-[#111827] hover:bg-[#1E293B] border border-[#1F2937] text-indigo-300 hover:text-white font-medium text-xs flex items-center justify-center space-x-2 transition-all active:scale-[0.98]"
+          className="w-full py-2.5 px-3 bg-[#C4B5FD] hover:bg-[#b8a6fc] text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center space-x-2 neo-btn"
         >
-          <Upload className="w-3.5 h-3.5 text-indigo-400" />
+          <Upload className="w-4 h-4 stroke-[3px]" />
           <span>Upload Dataset / DB</span>
         </button>
       </div>
 
-      {/* Active Databases / Data Sources Selector */}
-      <div className="px-4 py-2 border-y border-[#1F2937]/60 bg-[#0A0E18]/50">
-        <div className="text-[11px] font-semibold text-gray-400 mb-1.5 flex items-center justify-between">
+      {/* Active Database Selector */}
+      <div className="p-4 border-b-4 border-black bg-[#FFFDF5]">
+        <div className="text-[11px] font-black uppercase text-black mb-2 flex items-center justify-between">
           <span className="flex items-center gap-1.5">
-            <HardDrive className="w-3.5 h-3.5 text-emerald-400" />
-            Active Data Source
+            <HardDrive className="w-4 h-4 stroke-[3px]" />
+            Active Source
           </span>
-          <span className="text-[10px] text-gray-500">{databases.length} source(s)</span>
+          <span className="text-[10px] px-1.5 py-0.5 bg-[#FFD93D] border-2 border-black font-black">
+            {databases.length} DB(s)
+          </span>
         </div>
         <select
           value={activeDatabaseId}
           onChange={(e) => onSelectDatabase(e.target.value)}
-          className="w-full py-1.5 px-2.5 bg-[#111827] border border-[#1F2937] rounded-lg text-xs text-gray-200 focus:outline-none focus:border-indigo-500 truncate"
+          className="w-full py-2 px-3 bg-white border-3 border-black text-xs font-bold text-black focus:bg-[#FFD93D] focus:outline-none shadow-[3px_3px_0px_0px_#000] cursor-pointer truncate"
         >
           {databases.map((db) => (
             <option key={db.database_id} value={db.database_id}>
@@ -87,13 +91,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Session History List */}
-      <div className="flex-1 overflow-y-auto px-3 space-y-1.5 py-3">
-        <div className="px-3 py-1 text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
-          Recent Sessions
+      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+        <div className="px-2 py-1 text-[11px] font-black uppercase tracking-wider text-black flex items-center justify-between">
+          <span>Recent Sessions</span>
         </div>
         {conversations.length === 0 ? (
-          <div className="px-3 py-6 text-center text-xs text-gray-500">
-            No past conversations yet.
+          <div className="p-6 text-center text-xs font-bold text-gray-600 bg-white border-3 border-dashed border-black">
+            NO PAST SESSIONS YET.
           </div>
         ) : (
           conversations.map((conv) => {
@@ -102,14 +106,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={conv.id}
                 onClick={() => onSelectConversation(conv.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg text-xs flex items-center space-x-3 transition-colors ${
+                className={`w-full text-left p-2.5 text-xs font-bold flex items-center space-x-2.5 border-3 border-black transition-all neo-btn ${
                   isActive
-                    ? "bg-indigo-950/50 text-indigo-300 border border-indigo-800/50 font-medium"
-                    : "text-gray-400 hover:bg-[#111827] hover:text-gray-200"
+                    ? "bg-[#FFD93D] text-black shadow-[4px_4px_0px_0px_#000] -translate-y-0.5"
+                    : "bg-white text-black hover:bg-[#FFFDF5] shadow-[2px_2px_0px_0px_#000]"
                 }`}
               >
-                <MessageSquare className={`w-3.5 h-3.5 shrink-0 ${isActive ? "text-indigo-400" : "text-gray-500"}`} />
-                <span className="truncate flex-1">{conv.title || "Untitled Analysis"}</span>
+                <MessageSquare className="w-4 h-4 shrink-0 stroke-[2.5px]" />
+                <span className="truncate flex-1 uppercase text-[11px]">
+                  {conv.title || "Untitled Session"}
+                </span>
               </button>
             );
           })
@@ -117,42 +123,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Capabilities Overview */}
-      <div className="p-3 mx-3 my-2 rounded-xl bg-[#111827]/70 border border-[#1F2937] text-xs space-y-1.5">
-        <div className="font-semibold text-gray-300 flex items-center gap-1.5 text-[11px]">
-          <BarChart3 className="w-3.5 h-3.5 text-indigo-400" />
-          Multi-Source Engine
+      <div className="p-3 mx-3 my-2 bg-[#C4B5FD] border-3 border-black shadow-[3px_3px_0px_0px_#000] text-xs">
+        <div className="font-black uppercase text-black flex items-center gap-1.5 text-[11px] mb-1">
+          <BarChart3 className="w-4 h-4 stroke-[3px]" />
+          Multi-Agent System
         </div>
-        <div className="text-gray-400 space-y-1 text-[10px]">
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            Auto-converts CSV / Excel to SQL
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-            Dynamic Schema Introspection
-          </div>
+        <div className="text-black font-bold space-y-1 text-[10px]">
+          <div>• 10 Stateful LangGraph Nodes</div>
+          <div>• Nixtla Statsforecast AutoARIMA</div>
         </div>
       </div>
 
       {/* System Status Footer */}
-      <div className="p-3.5 border-t border-[#1F2937] bg-[#0A0E17] flex items-center justify-between text-xs">
+      <div className="p-3 border-t-4 border-black bg-white flex items-center justify-between text-xs">
         <div className="flex items-center space-x-2">
-          <Database className="w-4 h-4 text-gray-400" />
-          <span className="text-gray-300 font-medium text-[11px]">Engine</span>
+          <Database className="w-4 h-4 stroke-[3px]" />
+          <span className="text-black font-black uppercase text-[11px]">Engine</span>
         </div>
         <div className="flex items-center space-x-1.5">
           {dbStatus.connected ? (
-            <>
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-medium text-[11px]">
-                Ready {dbStatus.latency ? `(${dbStatus.latency}ms)` : ""}
-              </span>
-            </>
+            <span className="px-2 py-0.5 bg-[#10B981] text-white border-2 border-black font-black text-[10px] uppercase shadow-[2px_2px_0px_0px_#000] flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3 stroke-[3px]" />
+              ONLINE {dbStatus.latency ? `(${dbStatus.latency}ms)` : ""}
+            </span>
           ) : (
-            <>
-              <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
-              <span className="text-rose-400 font-medium text-[11px]">Offline</span>
-            </>
+            <span className="px-2 py-0.5 bg-[#FF6B6B] text-white border-2 border-black font-black text-[10px] uppercase shadow-[2px_2px_0px_0px_#000] flex items-center gap-1">
+              <AlertCircle className="w-3 h-3 stroke-[3px]" />
+              OFFLINE
+            </span>
           )}
         </div>
       </div>

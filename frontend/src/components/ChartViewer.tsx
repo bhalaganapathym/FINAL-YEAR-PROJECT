@@ -1,51 +1,59 @@
-import React from "react";
-import Plot from "react-plotly.js";
+import React, { Suspense, lazy } from "react";
+import { BarChart3, Loader2 } from "lucide-react";
 import { VisualizationPayload } from "../types";
-import { BarChart3 } from "lucide-react";
+
+const Plot = lazy(() => import("react-plotly.js"));
 
 interface ChartViewerProps {
-  visualization: VisualizationPayload;
+  visualization?: VisualizationPayload;
 }
 
 export const ChartViewer: React.FC<ChartViewerProps> = ({ visualization }) => {
-  const { figure, title } = visualization;
-
-  if (!figure || !figure.data || figure.data.length === 0) {
+  if (!visualization || !visualization.figure) {
     return null;
   }
 
-  const layout = {
-    ...figure.layout,
-    autosize: true,
-    paper_bgcolor: "rgba(0,0,0,0)",
-    plot_bgcolor: "rgba(0,0,0,0)",
-    margin: { l: 45, r: 25, t: 40, b: 45 },
-    font: {
-      family: "Inter, system-ui, sans-serif",
-      color: "#9CA3AF",
-      size: 11,
-    },
-  };
+  const { figure, title, type } = visualization;
 
   return (
-    <div className="my-4 rounded-xl border border-[#1F2937] bg-[#0E1526]/80 p-4 backdrop-blur-md shadow-xl">
-      {title && (
-        <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-gray-200">
-          <BarChart3 className="w-4 h-4 text-indigo-400" />
-          <span>{title}</span>
+    <div className="border-4 border-black shadow-[8px_8px_0px_0px_#000] bg-white overflow-hidden my-4">
+      {/* Chart Header */}
+      <div className="px-4 py-2.5 bg-[#FF6B6B] text-white font-black text-xs uppercase tracking-wider border-b-4 border-black flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <BarChart3 className="w-4 h-4 stroke-[3px]" />
+          <span>{title || "INTERACTIVE VISUALIZATION"}</span>
         </div>
-      )}
-      <div className="w-full h-80 min-h-[320px]">
-        <Plot
-          data={figure.data}
-          layout={layout}
-          config={{
-            responsive: true,
-            displayModeBar: false,
-          }}
-          useResizeHandler={true}
-          style={{ width: "100%", height: "100%" }}
-        />
+        <span className="px-2 py-0.5 bg-[#FFD93D] text-black border-2 border-black font-black text-[10px] shadow-[2px_2px_0px_0px_#000]">
+          {type?.toUpperCase() || "PLOT"}
+        </span>
+      </div>
+
+      {/* Plotly Canvas */}
+      <div className="p-3 w-full bg-white flex items-center justify-center min-h-[340px]">
+        <Suspense
+          fallback={
+            <div className="flex flex-col items-center justify-center p-8 space-y-2 text-black">
+              <Loader2 className="w-6 h-6 animate-spin stroke-[3px]" />
+              <span className="text-xs font-black uppercase">Rendering Neo Chart...</span>
+            </div>
+          }
+        >
+          <Plot
+            data={figure.data || []}
+            layout={{
+              ...figure.layout,
+              autosize: true,
+              paper_bgcolor: "#FFFFFF",
+              plot_bgcolor: "#FFFDF5",
+            }}
+            useResizeHandler={true}
+            style={{ width: "100%", height: "340px" }}
+            config={{
+              responsive: true,
+              displayModeBar: false,
+            }}
+          />
+        </Suspense>
       </div>
     </div>
   );

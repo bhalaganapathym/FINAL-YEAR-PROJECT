@@ -1,9 +1,3 @@
-"""
-Google Gemini LLM Service Manager using langchain-google-genai.
-Provides ChatGoogleGenerativeAI factory, structured output generation,
-automatic multi-model fallback, and safe error handling.
-"""
-
 import time
 from typing import Any, Dict, List, Optional, Tuple, Type
 from pydantic import BaseModel

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Upload, Link2, X, FileText, CheckCircle2, AlertCircle, Loader2, Database } from "lucide-react";
+import { Upload, Link2, X, FileText, CheckCircle2, AlertCircle, Loader2, Database, Sparkles } from "lucide-react";
 import { api } from "../services/api";
 import { DatabaseSourceInfo } from "../types";
 
@@ -80,79 +80,80 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-      <div className="w-full max-w-lg rounded-2xl bg-[#0E1526] border border-[#1F2937] shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="w-full max-w-lg bg-[#FFFDF5] border-6 border-black shadow-[16px_16px_0px_0px_#000] flex flex-col relative">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#1F2937] flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#FFD93D] border-b-4 border-black flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-              <Database className="w-4 h-4" />
+            <div className="w-9 h-9 bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-center">
+              <Database className="w-5 h-5 stroke-[3px] text-black" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white">Connect Your Database / Dataset</h3>
-              <p className="text-[11px] text-gray-400">Upload SQLite, CSV, Excel or connect remote database</p>
+              <h3 className="text-sm font-black uppercase text-black">CONNECT DATASET / DATABASE</h3>
+              <p className="text-[10px] font-bold text-black uppercase">SQLite, CSV, Excel or Remote URI</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
+            className="p-1.5 bg-white hover:bg-[#FF6B6B] hover:text-white border-2 border-black shadow-[2px_2px_0px_0px_#000] neo-btn"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 stroke-[3px]" />
           </button>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex border-b border-[#1F2937] bg-[#070B14]/60 px-6 pt-2">
+        <div className="flex border-b-4 border-black bg-white">
           <button
             onClick={() => { setTab("file"); setError(null); }}
-            className={`pb-2.5 px-4 text-xs font-semibold flex items-center space-x-2 border-b-2 transition-all ${
+            className={`flex-1 py-3 px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center space-x-2 border-r-4 border-black transition-colors ${
               tab === "file"
-                ? "border-indigo-500 text-indigo-400"
-                : "border-transparent text-gray-400 hover:text-gray-200"
+                ? "bg-[#C4B5FD] text-black"
+                : "bg-white text-black hover:bg-[#FFFDF5]"
             }`}
           >
-            <Upload className="w-3.5 h-3.5" />
+            <Upload className="w-4 h-4 stroke-[3px]" />
             <span>Upload File (.db, .csv, .xlsx, .sql)</span>
           </button>
           <button
             onClick={() => { setTab("uri"); setError(null); }}
-            className={`pb-2.5 px-4 text-xs font-semibold flex items-center space-x-2 border-b-2 transition-all ${
+            className={`flex-1 py-3 px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center space-x-2 transition-colors ${
               tab === "uri"
-                ? "border-indigo-500 text-indigo-400"
-                : "border-transparent text-gray-400 hover:text-gray-200"
+                ? "bg-[#C4B5FD] text-black"
+                : "bg-white text-black hover:bg-[#FFFDF5]"
             }`}
           >
-            <Link2 className="w-3.5 h-3.5" />
+            <Link2 className="w-4 h-4 stroke-[3px]" />
             <span>Remote URI</span>
           </button>
         </div>
 
-        {/* Content Body */}
+        {/* Body Content */}
         <div className="p-6 space-y-4">
           {error && (
-            <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-800/50 text-rose-300 text-xs flex items-start space-x-2">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <div className="p-3.5 bg-[#FF6B6B] border-3 border-black shadow-[3px_3px_0px_0px_#000] text-white text-xs font-black uppercase flex items-start space-x-2">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[3px]" />
               <span>{error}</span>
             </div>
           )}
 
           {successInfo ? (
-            <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-xs space-y-3">
-              <div className="flex items-center space-x-2 text-emerald-400 font-semibold">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Successfully Mounted Database!</span>
+            <div className="p-5 bg-[#10B981] border-4 border-black shadow-[6px_6px_0px_0px_#000] text-white text-xs space-y-3">
+              <div className="flex items-center space-x-2 font-black uppercase">
+                <CheckCircle2 className="w-5 h-5 stroke-[3px]" />
+                <span className="text-sm">Database Ingested & Mounted!</span>
               </div>
-              <div className="text-gray-300 text-[11px] space-y-1">
-                <div><strong className="text-gray-400">Source:</strong> {successInfo.name}</div>
-                <div><strong className="text-gray-400">Type:</strong> {successInfo.source_type.toUpperCase()}</div>
-                <div><strong className="text-gray-400">Tables Created ({successInfo.tables_count}):</strong> {successInfo.tables.join(", ")}</div>
+              <div className="bg-white text-black p-3 border-3 border-black space-y-1 font-bold">
+                <div><strong>NAME:</strong> {successInfo.name}</div>
+                <div><strong>TYPE:</strong> {successInfo.source_type.toUpperCase()}</div>
+                <div><strong>TABLES ({successInfo.tables_count}):</strong> {successInfo.tables.join(", ")}</div>
               </div>
               <div className="pt-2">
                 <button
                   onClick={onClose}
-                  className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-medium text-xs transition-colors"
+                  className="w-full py-3 bg-[#FFD93D] hover:bg-[#ffe053] text-black border-3 border-black shadow-[3px_3px_0px_0px_#000] font-black uppercase text-xs flex items-center justify-center space-x-1.5 neo-btn"
                 >
-                  Start Asking Questions
+                  <Sparkles className="w-4 h-4 stroke-[3px]" />
+                  <span>START ASKING QUESTIONS</span>
                 </button>
               </div>
             </div>
@@ -165,7 +166,7 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleFileDrop}
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-[#1F2937] hover:border-indigo-500/60 rounded-xl p-6 text-center cursor-pointer bg-[#070B14]/40 hover:bg-[#070B14]/80 transition-all"
+                    className="border-4 border-dashed border-black bg-white hover:bg-[#FFD93D]/20 p-8 text-center cursor-pointer shadow-[4px_4px_0px_0px_#000] transition-colors"
                   >
                     <input
                       ref={fileInputRef}
@@ -174,11 +175,13 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
                       onChange={handleFileSelect}
                       className="hidden"
                     />
-                    <FileText className="w-8 h-8 text-indigo-400 mx-auto mb-2" />
-                    <p className="text-xs font-semibold text-gray-200">
-                      {file ? file.name : "Click or Drag & Drop database file here"}
+                    <div className="w-12 h-12 bg-[#FFD93D] border-3 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center text-black mx-auto mb-3 rotate-[-2deg]">
+                      <FileText className="w-6 h-6 stroke-[3px]" />
+                    </div>
+                    <p className="text-xs font-black uppercase text-black">
+                      {file ? file.name : "CLICK OR DRAG & DROP DATASET FILE HERE"}
                     </p>
-                    <p className="text-[11px] text-gray-500 mt-1">
+                    <p className="text-[10px] font-bold text-gray-600 mt-1 uppercase">
                       Supports SQLite (.db), CSV (.csv), Excel (.xlsx), and SQL Dumps (.sql) up to 50MB
                     </p>
                   </div>
@@ -186,17 +189,17 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
                   <button
                     onClick={handleUpload}
                     disabled={!file || loading}
-                    className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-medium text-xs flex items-center justify-center space-x-2 transition-all shadow-md shadow-indigo-600/30"
+                    className="w-full py-3.5 bg-[#FF6B6B] hover:bg-[#ff5252] disabled:opacity-40 text-white font-black text-xs uppercase tracking-wider border-4 border-black shadow-[4px_4px_0px_0px_#000] flex items-center justify-center space-x-2 neo-btn"
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Parsing & Mounting Database...</span>
+                        <Loader2 className="w-4 h-4 animate-spin stroke-[3px]" />
+                        <span>PARSING & INGESTING DATASET...</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-4 h-4" />
-                        <span>Upload & Analyze Dataset</span>
+                        <Upload className="w-4 h-4 stroke-[3px]" />
+                        <span>UPLOAD & MOUNT DATASET</span>
                       </>
                     )}
                   </button>
@@ -204,7 +207,7 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
               ) : (
                 <form onSubmit={handleConnectUri} className="space-y-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-400 mb-1">
+                    <label className="block text-[11px] font-black uppercase text-black mb-1">
                       Display Name (Optional)
                     </label>
                     <input
@@ -212,11 +215,11 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
                       value={connectionName}
                       onChange={(e) => setConnectionName(e.target.value)}
                       placeholder="e.g. Production Analytics DB"
-                      className="w-full px-3 py-2 bg-[#070B14] border border-[#1F2937] focus:border-indigo-500 rounded-lg text-xs text-gray-200 placeholder-gray-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-white border-3 border-black text-xs font-bold text-black focus:bg-[#FFD93D] focus:outline-none shadow-[2px_2px_0px_0px_#000]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-400 mb-1">
+                    <label className="block text-[11px] font-black uppercase text-black mb-1">
                       Database Connection URI *
                     </label>
                     <input
@@ -224,23 +227,23 @@ export const DatabaseUploadModal: React.FC<DatabaseUploadModalProps> = ({
                       value={uri}
                       onChange={(e) => setUri(e.target.value)}
                       placeholder="mysql+pymysql://user:password@localhost:3306/dbname"
-                      className="w-full px-3 py-2 bg-[#070B14] border border-[#1F2937] focus:border-indigo-500 rounded-lg text-xs text-gray-200 placeholder-gray-500 focus:outline-none font-mono text-[11px]"
+                      className="w-full px-3 py-2 bg-white border-3 border-black text-xs font-bold text-black focus:bg-[#FFD93D] focus:outline-none font-mono shadow-[2px_2px_0px_0px_#000]"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={!uri.trim() || loading}
-                    className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-medium text-xs flex items-center justify-center space-x-2 transition-all shadow-md shadow-indigo-600/30 mt-2"
+                    className="w-full py-3.5 bg-[#FF6B6B] hover:bg-[#ff5252] disabled:opacity-40 text-white font-black text-xs uppercase tracking-wider border-4 border-black shadow-[4px_4px_0px_0px_#000] flex items-center justify-center space-x-2 neo-btn mt-3"
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Connecting & Reflecting Schema...</span>
+                        <Loader2 className="w-4 h-4 animate-spin stroke-[3px]" />
+                        <span>CONNECTING & REFLECTING SCHEMA...</span>
                       </>
                     ) : (
                       <>
-                        <Link2 className="w-4 h-4" />
-                        <span>Connect & Introspect Schema</span>
+                        <Link2 className="w-4 h-4 stroke-[3px]" />
+                        <span>CONNECT & INTROSPECT SCHEMA</span>
                       </>
                     )}
                   </button>

@@ -1,8 +1,3 @@
-"""
-Application configuration management using Pydantic Settings.
-Loads environment variables from .env file.
-"""
-
 import os
 from functools import lru_cache
 from pathlib import Path

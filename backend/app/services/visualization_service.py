@@ -1,6 +1,6 @@
 """
 Plotly Visualization Service for Persistent AI Data Analyst.
-Builds interactive Plotly chart specifications:
+Builds high-contrast Neo-Brutalist Plotly chart specifications:
 - Bar Charts (Rankings & categorical comparisons)
 - Line Charts (Time-series trends)
 - Pie / Donut Charts (Market share & part-to-whole)
@@ -12,22 +12,19 @@ Builds interactive Plotly chart specifications:
 from typing import Any, Dict, List, Optional
 from app.utils.logger import logger
 
-# Extended vibrant color palette (30 distinct colors) for rich multi-slice pie/bar visualizations
+# Neo-Brutalist High-Saturation Color Palette
 COLOR_PALETTE = [
-    "#6366F1", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6",
-    "#EC4899", "#14B8A6", "#3B82F6", "#F97316", "#06B6D4",
-    "#84CC16", "#A855F7", "#D946EF", "#0EA5E9", "#F43F5E",
-    "#22C55E", "#EAB308", "#64748B", "#475569", "#4F46E5",
-    "#059669", "#D97706", "#DC2626", "#7C3AED", "#DB2777",
-    "#0D9488", "#2563EB", "#EA580C", "#0891B2", "#65A30D"
+    "#FF6B6B", "#FFD93D", "#8B5CF6", "#10B981", "#38BDF8",
+    "#F97316", "#EC4899", "#A855F7", "#06B6D4", "#84CC16",
+    "#D946EF", "#F43F5E", "#000000", "#6366F1", "#14B8A6"
 ]
 
-DARK_LAYOUT_TEMPLATE = {
-    "paper_bgcolor": "rgba(0,0,0,0)",
-    "plot_bgcolor": "rgba(0,0,0,0)",
-    "font": {"family": "Inter, sans-serif", "color": "#F3F4F6", "size": 12},
-    "margin": {"l": 50, "r": 30, "t": 60, "b": 50},
-    "legend": {"orientation": "h", "yanchor": "bottom", "y": -0.3, "xanchor": "center", "x": 0.5},
+NEO_LAYOUT_TEMPLATE = {
+    "paper_bgcolor": "#FFFFFF",
+    "plot_bgcolor": "#FFFDF5",
+    "font": {"family": "Space Grotesk, sans-serif", "color": "#000000", "size": 13, "weight": 700},
+    "margin": {"l": 60, "r": 40, "t": 60, "b": 60},
+    "legend": {"orientation": "h", "yanchor": "bottom", "y": -0.3, "xanchor": "center", "x": 0.5, "font": {"color": "#000000"}},
     "hovermode": "closest",
     "autosize": True,
 }
@@ -35,7 +32,7 @@ DARK_LAYOUT_TEMPLATE = {
 
 class VisualizationService:
     """
-    Constructs frontend-friendly Plotly figure specifications.
+    Constructs frontend-friendly Neo-Brutalist Plotly figure specifications.
     """
 
     @classmethod
@@ -55,20 +52,31 @@ class VisualizationService:
             return {"data": [], "layout": {"title": "No Data Available"}}
 
         chart_type = chart_type.lower()
-        title_text = title or f"{y_col.replace('_', ' ').title()} by {x_col.replace('_', ' ').title()}"
+        title_text = (title or f"{y_col.replace('_', ' ').title()} by {x_col.replace('_', ' ').title()}").upper()
 
         layout = {
-            **DARK_LAYOUT_TEMPLATE,
-            "title": {"text": title_text, "font": {"size": 16, "color": "#FFFFFF"}},
+            **NEO_LAYOUT_TEMPLATE,
+            "title": {
+                "text": f"<b>{title_text}</b>",
+                "font": {"size": 16, "color": "#000000", "family": "Space Grotesk, sans-serif"},
+            },
             "xaxis": {
-                "title": x_col.replace("_", " ").title(),
-                "gridcolor": "#374151",
-                "zerolinecolor": "#4B5563",
+                "title": f"<b>{x_col.replace('_', ' ').upper()}</b>",
+                "gridcolor": "#E5E7EB",
+                "linecolor": "#000000",
+                "linewidth": 3,
+                "zerolinecolor": "#000000",
+                "zerolinewidth": 2,
+                "tickfont": {"color": "#000000", "size": 11, "family": "Space Grotesk, sans-serif"},
             },
             "yaxis": {
-                "title": y_col.replace("_", " ").title(),
-                "gridcolor": "#374151",
-                "zerolinecolor": "#4B5563",
+                "title": f"<b>{y_col.replace('_', ' ').upper()}</b>",
+                "gridcolor": "#E5E7EB",
+                "linecolor": "#000000",
+                "linewidth": 3,
+                "zerolinecolor": "#000000",
+                "zerolinewidth": 2,
+                "tickfont": {"color": "#000000", "size": 11, "family": "Space Grotesk, sans-serif"},
             },
         }
 
@@ -82,8 +90,8 @@ class VisualizationService:
                 "x": x_vals,
                 "y": y_vals,
                 "name": y_col.replace("_", " ").title(),
-                "line": {"color": "#6366F1", "width": 3, "shape": "spline"},
-                "marker": {"size": 6, "color": "#818CF8"},
+                "line": {"color": "#FF6B6B", "width": 4},
+                "marker": {"size": 8, "color": "#000000", "line": {"color": "#FFD93D", "width": 2}},
             }
             return {"data": [trace], "layout": layout}
 
@@ -95,27 +103,30 @@ class VisualizationService:
                 "x": x_vals,
                 "y": y_vals,
                 "name": y_col.replace("_", " ").title(),
-                "line": {"color": "#10B981", "width": 2},
-                "fillcolor": "rgba(16, 185, 129, 0.2)",
+                "line": {"color": "#10B981", "width": 3},
+                "fillcolor": "rgba(16, 185, 129, 0.25)",
             }
             return {"data": [trace], "layout": layout}
 
         elif chart_type == "pie":
-            # Multi-slice pie/donut chart
             colors = COLOR_PALETTE * ((len(x_vals) // len(COLOR_PALETTE)) + 1)
             trace = {
                 "type": "pie",
                 "labels": x_vals,
                 "values": y_vals,
-                "hole": 0.4,
-                "marker": {"colors": colors[:len(x_vals)]},
+                "hole": 0.45,
+                "marker": {
+                    "colors": colors[:len(x_vals)],
+                    "line": {"color": "#000000", "width": 3},
+                },
                 "textinfo": "percent" if len(x_vals) > 6 else "label+percent",
                 "textposition": "inside" if len(x_vals) > 6 else "auto",
                 "hoverinfo": "label+value+percent",
+                "textfont": {"family": "Space Grotesk, sans-serif", "color": "#000000", "size": 12},
             }
             pie_layout = {
-                **DARK_LAYOUT_TEMPLATE,
-                "title": {"text": title_text, "font": {"size": 16, "color": "#FFFFFF"}},
+                **NEO_LAYOUT_TEMPLATE,
+                "title": {"text": f"<b>{title_text}</b>", "font": {"size": 16, "color": "#000000"}},
                 "showlegend": True,
             }
             return {"data": [trace], "layout": pie_layout}
@@ -126,18 +137,18 @@ class VisualizationService:
                 "type": "indicator",
                 "mode": "number",
                 "value": val,
-                "title": {"text": title_text, "font": {"size": 14, "color": "#9CA3AF"}},
-                "number": {"font": {"size": 36, "color": "#10B981"}},
+                "title": {"text": f"<b>{title_text}</b>", "font": {"size": 16, "color": "#000000"}},
+                "number": {"font": {"size": 42, "color": "#FF6B6B", "family": "Space Grotesk, sans-serif"}},
             }
             kpi_layout = {
-                **DARK_LAYOUT_TEMPLATE,
-                "margin": {"l": 20, "r": 20, "t": 30, "b": 20},
-                "height": 200,
+                **NEO_LAYOUT_TEMPLATE,
+                "margin": {"l": 30, "r": 30, "t": 40, "b": 30},
+                "height": 220,
             }
             return {"data": [trace], "layout": kpi_layout}
 
         else:
-            # Default: Bar Chart
+            # Default: Bar Chart with thick black outline
             trace = {
                 "type": "bar",
                 "x": x_vals,
@@ -145,8 +156,7 @@ class VisualizationService:
                 "name": y_col.replace("_", " ").title(),
                 "marker": {
                     "color": COLOR_PALETTE[0],
-                    "opacity": 0.9,
-                    "line": {"color": "#818CF8", "width": 1},
+                    "line": {"color": "#000000", "width": 3},
                 },
             }
             return {"data": [trace], "layout": layout}

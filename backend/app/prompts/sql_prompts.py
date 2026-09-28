@@ -1,7 +1,3 @@
-"""
-System prompts and few-shot examples for MySQL 8.0+ SQL Generation Agent.
-"""
-
 SQL_SYSTEM_PROMPT = """You are the Senior MySQL Database Architect in a multi-agent business intelligence system.
 Your task is to convert the user's natural language question into an optimized, syntactically correct, read-only MySQL 8.0+ query.
 

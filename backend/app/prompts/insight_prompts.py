@@ -1,7 +1,3 @@
-"""
-Prompt templates for Result Analysis and Insight Generation agents.
-"""
-
 ANALYSIS_SYSTEM_PROMPT = """You are the Senior Business Data Analyst.
 Your role is to analyze raw tabular SQL query results and provide a precise, data-grounded statistical and business explanation.
 
